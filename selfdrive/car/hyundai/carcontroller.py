@@ -204,16 +204,17 @@ class CarController:
                                                         hud_control.leadVisible, set_speed_in_units, stopping,
                                                           CC.cruiseControl.override, CS))
         else:
+          acc_standstill = stopping if CS.out.vEgo < 2. else False
           can_sends.extend(hyundaiexcan.create_acc_commands(self.packer, CC.enabled, accel, jerk, int(self.frame / 2),
                                                           hud_control.leadVisible, set_speed_in_units, stopping,
-                                                          CC.cruiseControl.override, CS))
+                                                          CC.cruiseControl.override, CS, CS.out.gasPressed, acc_standstill, CS.out.vEgo))
 
       # 5 Hz ACC options
       if self.frame % 20 == 0 and self.CP.openpilotLongitudinalControl:
         if self.CP.sccBus == 0:
           can_sends.extend(hyundaican.create_acc_opt(self.packer))
-        else:
-          can_sends.extend(hyundaiexcan.create_acc_opt(self.packer))
+        elif CS.scc13 is not None:
+          can_sends.extend(hyundaiexcan.create_acc_opt(self.packer, CS))
 
       # 2 Hz front radar options
       if self.frame % 50 == 0 and self.CP.openpilotLongitudinalControl and self.CP.sccBus == 0:
