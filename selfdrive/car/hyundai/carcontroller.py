@@ -214,7 +214,7 @@ class CarController:
         if self.CP.sccBus == 0:
           can_sends.extend(hyundaican.create_acc_opt(self.packer))
         elif CS.scc13 is not None:
-          can_sends.extend(hyundaiexcan.create_acc_opt(self.packer, CS))
+          can_sends.append(hyundaiexcan.create_acc_opt(self.packer, CS))
 
       # 2 Hz front radar options
       if self.frame % 50 == 0 and self.CP.openpilotLongitudinalControl and self.CP.sccBus == 0:
