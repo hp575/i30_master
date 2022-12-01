@@ -204,10 +204,9 @@ class CarController:
                                                         hud_control.leadVisible, set_speed_in_units, stopping,
                                                           CC.cruiseControl.override, CS))
         else:
-          acc_standstill = stopping if CS.out.vEgo < 2. else False
           can_sends.extend(hyundaiexcan.create_acc_commands(self.packer, CC.enabled, accel, jerk, int(self.frame / 2),
                                                           hud_control.leadVisible, set_speed_in_units, stopping,
-                                                          CC.cruiseControl.override, CS, CS.out.gasPressed, acc_standstill, CS.out.vEgo))
+                                                          CC.cruiseControl.override, CS))
 
       # 5 Hz ACC options
       if self.frame % 20 == 0 and self.CP.openpilotLongitudinalControl:

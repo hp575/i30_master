@@ -18,7 +18,7 @@ def create_mdps12(packer, frame, mdps12):
   return packer.make_can_msg("MDPS12", 2, values)
 
 def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
-                        set_speed, stopping, long_override, CS, gaspressed, standstill, v_ego):
+                        set_speed, stopping, long_override, CS):
   commands = []
 
   cruise_enabled = enabled and CS.out.cruiseState.enabled
@@ -63,14 +63,14 @@ def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
     values = CS.scc14
 
     if enabled:
-      values["ACCMode"] = 2 if gaspressed and (accel > -0.2) else 1
+      values["ACCMode"] = 2 if CS.out.gasPressed and (accel > -0.2) else 1
       values["ObjGap"] = obj_gap
-      if standstill:
+      if stopping:
         values["JerkUpperLimit"] = 0.5
         values["JerkLowerLimit"] = 10.
         values["ComfortBandUpper"] = 0.
         values["ComfortBandLower"] = 0.
-        if v_ego > 0.27:
+        if CS.out.vEgo > 0.27:
           values["ComfortBandUpper"] = 2.
           values["ComfortBandLower"] = 0.
       else:
